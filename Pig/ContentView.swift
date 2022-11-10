@@ -42,8 +42,12 @@ struct ContentView: View {
                             withAnimation(.easeInOut(duration: 1)){
                                 rotation += 360
                             }
+                            if gameScore >= 100 {
+                                gameOver = true
+                            }
                         }
                         .buttonStyle(CustomButtonStyle())
+                        
                     }
                     CustomText(text: "Game Score: \(gameScore)")
                     NavigationLink("How to play", destination: InstructionView())
@@ -52,6 +56,15 @@ struct ContentView: View {
                     Spacer()
                 }
             }
+            .alert(isPresented: $gameOver, content: {
+                Alert(title: Text("You won the game"), dismissButton:
+                    .destructive(Text("Play again"), action: {
+                        withAnimation(Animation.default) {
+                            gameScore = 0
+                            gameOver = false
+                        }
+                    }))
+                })
         }
     }
     func endTurn() {
